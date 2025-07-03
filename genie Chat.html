@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Employee FAQ Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    #chatbox {
+      width: 500px;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 20px;
+      background: #fff;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    .bot {
+      background: #eef;
+    }
+    .user {
+      background: #def;
+      text-align: right;
+    }
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    img {
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <div class="message bot">Welcome! Please choose a topic:</div>
+    <select id="mainSelect">
+      <option value="">-- Select an option --</option>
+      <option value="vconnect">vConnect Login</option>
+      <option value="increment">Increment/Confirmation Related</option>
+      <option value="salary">Download Salary Slip/Form 16</option>
+      <option value="mediclaim">Mediclaim</option>
+      <option value="referrals">Referrals</option>
+    </select>
+    <div id="subSelectContainer"></div>
+    <div id="response"></div>
+  </div>
+
+  <script>
+    const mainSelect = document.getElementById('mainSelect');
+    const subSelectContainer = document.getElementById('subSelectContainer');
+    const responseDiv = document.getElementById('response');
+
+    const vconnectSubOptions = {
+      "trouble": "Are you having trouble logging in?",
+      "reset": "Do you want a password reset?",
+      "url": "Do you require the organizational URL?"
+    };
+
+    const vconnectResponses = {
+      "trouble": `
+Here are the steps for 2-factor authentication login for employees through the Darwinbox mobile app:<br><br>
+1. Open your Darwinbox (vConnect) application > Click on <strong>Enter Organization URL</strong> > then enter <em>vconnect-msn.darwinbox.in</em> > Next.<br>
+<img src="https://hr-domestic-sales.github.io/genieChatbot/images/step1.png" width="250"><br><br>
+2. Enter your <strong>EMP ID</strong> and <strong>Password</strong> > Click on login.<br>
+<img src="https://hr-domestic-sales.github.io/genieChatbot/images/step2.png" width="250"><br><br>
+3. Copy the code which is visible under <strong>Register the Key</strong>.<br>
+<img src="https://hr-domestic-sales.github.io/genieChatbot/images/step3.png" width="250"><br><br>
+4. Download the <strong>Microsoft Authenticator App</strong> > Click on the <strong>Add account</strong> icon.<br>
+<img src="https://hr-domestic-sales.github.io/genieChatbot/images/step4.png" width="250"><br><br>
+5. Click on <strong>Other account</strong> > <strong>Enter code manually</strong>.<br>
+<img src="https://hr-domestic-sales.github.io/genieChatbot/images/step5.png" width="250"><br>
+<img src="https://hr-domestic-sales.github.io/genieChatbot/images/step6.png" width="250"><br><br>
+6. Enter your <strong>Employee ID</strong> and paste the secret key > Finish.<br>
+<img src="https://hr-domestic-sales.github.io/genieChatbot/images/step7.png" width="250"><br><br>
+7. Your account will be added. Use the one-time passcode to log in.
+`,
+      "reset": "To reset your password, click 'Forgot Password' on the login page and follow the instructions.",
+      "url": "The organizational vConnect URL is <strong>https://vconnect-msn.darwinbox.in</strong>."
+    };
+
+    const responses = {
+      "increment": "For increment and confirmation queries, please contact HR at hr@company.com.",
+      "salary": "To download your salary slip or Form 16, please log in to the HR portal and navigate to 'Payroll Documents.'",
+      "mediclaim": "Mediclaim queries can be raised via the insurance helpdesk portal.",
+      "referrals": "To refer a candidate, please fill in the referral form available on the intranet."
+    };
+
+    mainSelect.addEventListener('change', () => {
+      const choice = mainSelect.value;
+      responseDiv.innerHTML = '';
+      subSelectContainer.innerHTML = '';
+
+      if (choice === "vconnect") {
+        const subSelect = document.createElement('select');
+        subSelect.innerHTML = `<option value="">-- Select a vConnect query --</option>`;
+        for (const key in vconnectSubOptions) {
+          subSelect.innerHTML += `<option value="${key}">${vconnectSubOptions[key]}</option>`;
+        }
+        subSelectContainer.appendChild(subSelect);
+
+        subSelect.addEventListener('change', () => {
+          const subChoice = subSelect.value;
+          responseDiv.innerHTML = `<div class="message bot">${vconnectResponses[subChoice]}</div>`;
+        });
+
+      } else if (choice) {
+        responseDiv.innerHTML = `<div class="message bot">${responses[choice]}</div>`;
+      }
+    });
+  </script>
+</body>
+</html>
